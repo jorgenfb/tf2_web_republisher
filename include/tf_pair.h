@@ -133,7 +133,8 @@ public:
     {
       if (trans_thres_ == 0.0 || angular_thres_ == 0.0
           || tf_transmitted_.getOrigin().distance(tf_received_.getOrigin()) > trans_thres_
-          || tf_transmitted_.getRotation().angle(tf_received_.getRotation()) > angular_thres_
+          // .angle() returns the half angle. See https://github.com/ros/geometry/blob/noetic-devel/tf/include/tf/LinearMath/Quaternion.h#L211
+          || tf_transmitted_.getRotation().angle(tf_received_.getRotation()) * 2.0 > angular_thres_ 
           || first_transmission_)
       {
         result = true;
